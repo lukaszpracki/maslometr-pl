@@ -18,13 +18,19 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Step 2: Authenticate with Google Cloud using WIF
-    - name: Authenticate to Google Cloud
+#    # Step 2: Authenticate with Google Cloud using WIF
+#    - name: Authenticate to Google Cloud
+#      uses: google-github-actions/auth@v1
+#      with:
+#        workload_identity_provider: "projects/51731197040/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+#        service_account: "get-html@maslometr.iam.gserviceaccount.com"
+
+#- id: 'auth'
+    - name: 'Authenticate to Google Cloud'
       uses: google-github-actions/auth@v1
       with:
-        workload_identity_provider: "projects/51731197040/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
-        service_account: "get-html@maslometr.iam.gserviceaccount.com"
-
+        credentials_json: '${{ secrets.GCS_KEY }}'
+    
     # Step 3: Set up Google Cloud SDK
     - name: Set up Google Cloud CLI
       run: |
