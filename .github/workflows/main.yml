@@ -29,6 +29,11 @@ jobs:
     - name: Set up Google Cloud CLI
       run: |
         sudo apt-get update && sudo apt-get install -y google-cloud-cli
+   
+    # Step 1.5
+    - name: Check Auth
+      run: | 
+        gcloud auth list
 
     # Step 4: Download file from GCS
     - name: Download file from GCS
