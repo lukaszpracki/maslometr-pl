@@ -1,0 +1,45 @@
+name: Download File from GCS with WIF
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  download_file:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write # Required for Workload Identity Federation
+      contents: write
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Step 2: Authenticate with Google Cloud using WIF
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        workload_identity_provider: "projects/51731197040/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+        service_account: "get-html@maslometr.iam.gserviceaccount.com"
+
+    # Step 3: Set up Google Cloud SDK
+    - name: Set up Google Cloud SDK
+      run: |
+        sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+
+    # Step 4: Download file from GCS
+    - name: Download file from GCS
+      run: |
+        gsutil cp gs://ceny-masla/241222-maslo.csv ./241222-maslo.csv
+
+    # Step 5: Commit and push changes to the repository
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add 241222-maslo.csv
+        git commit -m "Update 241222-maslo.csv from GCS"
+        git push
