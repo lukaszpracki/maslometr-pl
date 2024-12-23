@@ -26,9 +26,9 @@ jobs:
         service_account: "get-html@maslometr.iam.gserviceaccount.com"
 
     # Step 3: Set up Google Cloud SDK
-    - name: Set up Google Cloud SDK
+    - name: Set up Google Cloud CLI
       run: |
-        sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+        sudo apt-get update && sudo apt-get install -y google-cloud-cli
 
     # Step 4: Download file from GCS
     - name: Download file from GCS
