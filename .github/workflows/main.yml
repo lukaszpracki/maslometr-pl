@@ -1,37 +1,35 @@
-name: Download File from GCS
+name: Update index.html from Cloud Storage
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 1 * * *' # Runs daily at 01:00 UTC
 
 jobs:
-  download-file:
+  update-file:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Step 1: Check out the repository
+      - name: Check out repository
+        uses: actions/checkout@v3
 
-    - name: Set up Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@v1
-      with:
-        version: 'latest'
+      # Step 2: Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          service_account_key: ${{ secrets.TEST_STORAGE }}
+          project_id: maslometr
 
-    - name: Authenticate with GCS
-      run: |
-        echo "${{ secrets.GCS_KEY }}" > /tmp/gcs-key.json
-        gcloud auth activate-service-account --key-file=/tmp/gcs-key.json
+      # Step 3: Download index.html from GCS
+      - name: Download index.html
+        run: |
+          gsutil cp gs://ceny-masla/index.html ./index.html
 
-    - name: Download file from GCS
-      run: |
-        gsutil cp gs://maslo-prices/241222-maslo.csv ./241222-maslo.csv
-
-    - name: Verify downloaded file
-      run: |
-        cat ./241222-maslo.csv
-
-    - name: Cleanup
-      run: |
-        rm -f /tmp/gcs-key.json
+      # Step 4: Commit and push the updated index.html
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Update index.html from Cloud Storage [skip ci]" || echo "No changes to commit"
+          git push
