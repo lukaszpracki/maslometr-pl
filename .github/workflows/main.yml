@@ -29,6 +29,11 @@ jobs:
       - name: Authenticate Google Cloud
         run: echo "${{ secrets.TEST_STORAGE }}" > /tmp/key.json && export GOOGLE_APPLICATION_CREDENTIALS=/tmp/key.json
 
+      - name: Verify Google Cloud Authentication
+        run: |
+          gcloud auth list
+          gsutil ls gs://ceny-masla/
+
       - name: Download index.html
         run: |
           gsutil -i test-storage@maslometr.iam.gserviceaccount.com cp gs://ceny-masla/index.html ./index.html
