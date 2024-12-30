@@ -28,7 +28,7 @@ jobs:
       # Step 3: Download index.html from GCS
       - name: Download index.html
         run: |
-          gsutil cp gs://ceny-masla/index.html ./index.html
+          gsutil -i test-storage@maslometr.iam.gserviceaccount.com cp gs://ceny-masla/index.html ./index.html
 
       # Step 4: Commit and push the updated index.html
       - name: Commit and push changes
