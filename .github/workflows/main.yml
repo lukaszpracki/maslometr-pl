@@ -16,15 +16,19 @@ jobs:
 
       # Step 2: Set up Google Cloud SDK
       - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
+#        uses: google-github-actions/setup-gcloud@v1
+#        with:
+#          service_account_key: ${{ secrets.TEST_STORAGE }}
+#          project_id: maslometr
+
+      - uses: 'google-github-actions/auth@v2'
         with:
-          service_account_key: ${{ secrets.TEST_STORAGE }}
-          project_id: maslometr
+          credentials_json: '${{ secrets.TEST_STORAGE }}' # Replace with the name of your GitHub Actions secret
 
       # Step 3: Download index.html from GCS
       - name: Download index.html
         run: |
-          gsutil -i test-storage@maslometr.iam.gserviceaccount.com cp gs://ceny-masla/index.html ./index.html
+          gsutil cp gs://ceny-masla/index.html ./index.html
 
       # Step 4: Commit and push the updated index.html
       - name: Commit and push changes
