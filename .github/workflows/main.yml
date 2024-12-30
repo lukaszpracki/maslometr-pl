@@ -29,6 +29,9 @@ jobs:
       - name: Authenticate Google Cloud
         run: echo "${{ secrets.TEST_STORAGE }}" > /tmp/key.json && export GOOGLE_APPLICATION_CREDENTIALS=/tmp/key.json
 
+      - name: Activate Service Account
+        run: gcloud auth activate-service-account --key-file=/tmp/key.json
+
       - name: Verify Google Cloud Authentication
         run: |
           gcloud auth list
