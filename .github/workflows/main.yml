@@ -3,6 +3,7 @@ name: Update index.html from Cloud Storage
 on:
   schedule:
     - cron: '0 1 * * *' # Runs daily at 01:00 UTC
+  workflow_dispatch:
 
 jobs:
   update-file:
