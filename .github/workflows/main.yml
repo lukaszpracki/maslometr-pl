@@ -26,6 +26,9 @@ jobs:
           credentials_json: '${{ secrets.TEST_STORAGE }}' # Replace with the name of your GitHub Actions secret
 
       # Step 3: Download index.html from GCS
+      - name: Authenticate Google Cloud
+        run: echo "${{ secrets.TEST_STORAGE }}" > /tmp/key.json && export GOOGLE_APPLICATION_CREDENTIALS=/tmp/key.json
+
       - name: Download index.html
         run: |
           gsutil -i test-storage@maslometr.iam.gserviceaccount.com cp gs://ceny-masla/index.html ./index.html
